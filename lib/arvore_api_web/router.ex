@@ -8,7 +8,7 @@ defmodule ArvoreApiWeb.Router do
   scope "/api", ArvoreApiWeb do
     pipe_through :api
     post "/v2/partners/entities", ArvoreController, :create
-    resources "/v2/partners/entities/:id", ArvoreController, only: [:show, :update]
+    resources "/v2/partners/entities", ArvoreController, only: [:show, :update]
   end
 
   # Enables LiveDashboard only for development
