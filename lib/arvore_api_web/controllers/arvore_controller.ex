@@ -25,6 +25,12 @@ defmodule ArvoreApiWeb.ArvoreController do
     end
   end
 
+  def update(conn, params) do
+    params
+    |> ArvoreApi.update_entity()
+    |> handle_response(conn, "update.json", :ok)
+  end
+
   defp handle_response({:ok, entity}, conn, view, status) do
     conn
     |> put_status(status)
