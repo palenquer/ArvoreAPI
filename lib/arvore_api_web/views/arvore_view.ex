@@ -6,7 +6,8 @@ defmodule ArvoreApiWeb.ArvoreView do
       id: entity.id,
       entity_type: entity.entity_type,
       inep: entity.inep,
-      name: entity.name
+      name: entity.name,
+      parent_id: entity.parent_id
     }
   end
 
