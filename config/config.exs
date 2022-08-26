@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :arvore_api,
   ecto_repos: [ArvoreApi.Repo]
