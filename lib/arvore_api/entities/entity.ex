@@ -11,7 +11,7 @@ defmodule ArvoreApi.Entity do
     timestamps()
   end
 
-  @required_params [:name, :entity_type, :inep]
+  @required_params [:name, :entity_type, :inep, :parent_id]
 
   def build(params) do
     params
@@ -25,5 +25,6 @@ defmodule ArvoreApi.Entity do
     module
     |> cast(params, @required_params)
     |> validate_required(@required_params)
+    |> validate_inclusion(:entity_type, ["network", "school", "class"])
   end
 end
