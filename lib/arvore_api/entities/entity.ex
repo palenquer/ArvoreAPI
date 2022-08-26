@@ -20,6 +20,7 @@ defmodule ArvoreApi.Entity do
   end
 
   def changeset(params), do: create_changeset(%__MODULE__{}, params)
+  def changeset(entity, params), do: create_changeset(entity, params)
 
   defp create_changeset(module, params) do
     module
