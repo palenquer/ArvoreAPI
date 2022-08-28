@@ -1,4 +1,8 @@
 defmodule ArvoreApi.Entity do
+  @moduledoc """
+    Schema do Entity e validações.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

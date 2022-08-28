@@ -1,4 +1,8 @@
 defmodule ArvoreApi.Entities do
+  @moduledoc """
+    Utilizado para encaminhar as informações ao changeset e executar o Repo.
+  """
+
   alias ArvoreApi.Repo
   alias ArvoreApi.Entity
 
