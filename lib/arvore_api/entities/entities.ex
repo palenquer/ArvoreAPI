@@ -9,4 +9,84 @@ defmodule ArvoreApi.Entities do
   def preload_children(entity) do
     Repo.preload(entity, :children)
   end
+
+  def create_class(attrs) do
+    with %{"parent_id" => parent_id} <- attrs,
+         %{entity_type: entity_type} <- get(parent_id),
+         "school" <- entity_type do
+      Entity.class_changeset(%Entity{}, attrs)
+      |> Repo.insert()
+    else
+      _ -> {:error, :invalid_parent}
+    end
+  end
+
+  def create_school(attrs) do
+    with %{"parent_id" => parent_id} <- attrs,
+         %{entity_type: entity_type} <- get(parent_id),
+         :ok <- get_parent(entity_type) do
+      Entity.school_changeset(%Entity{}, attrs)
+      |> Repo.insert()
+    else
+      _ -> {:error, :invalid_parent}
+    end
+  end
+
+  def create_network(attrs) do
+    Entity.network_changeset(%Entity{}, attrs)
+    |> Repo.insert()
+  end
+
+  def update_class(id, attrs) do
+    case Repo.get(Entity, id) do
+      nil ->
+        {:error, "Entity not found"}
+
+      entity ->
+        with %{"parent_id" => parent_id} <- attrs,
+             %{entity_type: entity_type} <- get(parent_id),
+             "school" <- entity_type do
+          Entity.class_changeset(entity, attrs)
+          |> Repo.update()
+        else
+          _ -> {:error, :invalid_parent}
+        end
+    end
+  end
+
+  def update_school(id, attrs) do
+    case Repo.get(Entity, id) do
+      nil ->
+        {:error, "Entity not found"}
+
+      entity ->
+        with %{"parent_id" => parent_id} <- attrs,
+             %{entity_type: entity_type} <- get(parent_id),
+             :ok <- get_parent(entity_type) do
+          Entity.school_changeset(entity, attrs)
+          |> Repo.update()
+        else
+          _ -> {:error, :invalid_parent}
+        end
+    end
+  end
+
+  def update_network(id, attrs) do
+    case Repo.get(Entity, id) do
+      nil ->
+        {:error, "Entity not found"}
+
+      entity ->
+        Entity.network_changeset(entity, attrs)
+        |> Repo.update()
+    end
+  end
+
+  defp get_parent(parent) do
+    case parent do
+      "network" -> :ok
+      nil -> :ok
+      _ -> :error
+    end
+  end
 end

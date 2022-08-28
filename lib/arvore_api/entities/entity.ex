@@ -11,21 +11,24 @@ defmodule ArvoreApi.Entity do
     timestamps()
   end
 
-  @required_params [:name, :entity_type, :inep, :parent_id]
-
-  def build(params) do
-    params
-    |> changeset()
-    |> apply_action(:insert)
+  def class_changeset(entity, params) do
+    entity
+    |> cast(params, [:name, :entity_type, :parent_id])
+    |> validate_required([:name, :entity_type, :parent_id])
+    |> validate_inclusion(:entity_type, ["class"])
   end
 
-  def changeset(params), do: create_changeset(%__MODULE__{}, params)
-  def changeset(entity, params), do: create_changeset(entity, params)
+  def school_changeset(entity, params) do
+    entity
+    |> cast(params, [:name, :entity_type, :inep, :parent_id])
+    |> validate_required([:name, :entity_type, :inep])
+    |> validate_inclusion(:entity_type, ["school"])
+  end
 
-  defp create_changeset(module, params) do
-    module
-    |> cast(params, @required_params)
-    |> validate_required(@required_params)
-    |> validate_inclusion(:entity_type, ["network", "school", "class"])
+  def network_changeset(entity, params) do
+    entity
+    |> cast(params, [:name, :entity_type])
+    |> validate_required([:name, :entity_type])
+    |> validate_inclusion(:entity_type, ["network"])
   end
 end
