@@ -24,7 +24,7 @@ defmodule ArvoreApi.Entities do
   def create_school(attrs) do
     with %{"parent_id" => parent_id} <- attrs,
          %{entity_type: entity_type} <- get(parent_id),
-         :ok <- get_parent(entity_type) do
+         :ok <- get_school_parent(entity_type) do
       Entity.school_changeset(%Entity{}, attrs)
       |> Repo.insert()
     else
@@ -62,7 +62,7 @@ defmodule ArvoreApi.Entities do
       entity ->
         with %{"parent_id" => parent_id} <- attrs,
              %{entity_type: entity_type} <- get(parent_id),
-             :ok <- get_parent(entity_type) do
+             :ok <- get_school_parent(entity_type) do
           Entity.school_changeset(entity, attrs)
           |> Repo.update()
         else
@@ -82,7 +82,7 @@ defmodule ArvoreApi.Entities do
     end
   end
 
-  defp get_parent(parent) do
+  defp get_school_parent(parent) do
     case parent do
       "network" -> :ok
       nil -> :ok
