@@ -11,30 +11,47 @@ defmodule ArvoreApi.Entities do
   end
 
   def create_class(attrs) do
-    with %{"parent_id" => parent_id} <- attrs,
-         %{entity_type: entity_type} <- get(parent_id),
-         "school" <- entity_type do
-      Entity.class_changeset(%Entity{}, attrs)
-      |> Repo.insert()
-    else
-      _ -> {:error, :invalid_parent}
+    case attrs do
+      %{"parent_id" => nil} ->
+        {:error, :invalid_parent}
+
+      %{"parent_id" => parent_id} ->
+        with %{entity_type: entity_type} <- get(parent_id),
+             "school" <- entity_type do
+          Entity.class_changeset(%Entity{}, attrs)
+          |> Repo.insert()
+        else
+          _ -> {:error, :invalid_parent}
+        end
     end
   end
 
   def create_school(attrs) do
-    with %{"parent_id" => parent_id} <- attrs,
-         %{entity_type: entity_type} <- get(parent_id),
-         :ok <- get_school_parent(entity_type) do
-      Entity.school_changeset(%Entity{}, attrs)
-      |> Repo.insert()
-    else
-      _ -> {:error, :invalid_parent}
+    case attrs do
+      %{"parent_id" => nil} ->
+        Entity.school_changeset(%Entity{}, attrs)
+        |> Repo.insert()
+
+      %{"parent_id" => parent_id} ->
+        with %{entity_type: entity_type} <- get(parent_id),
+             :ok <- get_school_parent(entity_type) do
+          Entity.school_changeset(%Entity{}, attrs)
+          |> Repo.insert()
+        else
+          _ -> {:error, :invalid_parent}
+        end
     end
   end
 
   def create_network(attrs) do
-    Entity.network_changeset(%Entity{}, attrs)
-    |> Repo.insert()
+    case attrs do
+      %{"parent_id" => nil} ->
+        Entity.network_changeset(%Entity{}, attrs)
+        |> Repo.insert()
+
+      _ ->
+        {:error, :invalid_parent}
+    end
   end
 
   def update_class(id, attrs) do
@@ -85,7 +102,6 @@ defmodule ArvoreApi.Entities do
   defp get_school_parent(parent) do
     case parent do
       "network" -> :ok
-      nil -> :ok
       _ -> :error
     end
   end
