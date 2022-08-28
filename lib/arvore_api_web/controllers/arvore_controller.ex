@@ -29,9 +29,8 @@ defmodule ArvoreApiWeb.ArvoreController do
         |> text("Entity not found!")
 
       entity ->
-        conn
-        |> put_status(200)
-        |> render("show.json", entity: Entities.preload_children(entity))
+        {:ok, entity}
+        |> handle_response(conn, "show.json", :ok)
     end
   end
 
