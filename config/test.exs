@@ -7,7 +7,7 @@ use Mix.Config
 # Run `mix help test` for more information.
 config :arvore_api, ArvoreApi.Repo,
   username: "root",
-  password: "",
+  password: "root",
   database: "arvore_api_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
