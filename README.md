@@ -6,6 +6,8 @@ Construir uma API usando Phoenix (elixir) e banco de dados MySQL com estrutura d
 
 ## Rotas
 
+### Deploy: https://arvore.fly.dev
+
 ### Rotas disponíveis:
 
 * **GET** /api/v2/partners/entities/:id
